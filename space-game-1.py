@@ -27,6 +27,36 @@ shotX = 0
 shotY = 0
 shotActive = False
 
+class Enemy:
+    def __init__(self, x, y, dir):
+        self.x = x
+        self.y = y
+        self.dir = dir
+        self.alive = True
+        
+en1 = Enemy(1, 15, 'r')
+
+def DrawEnemies():
+    
+    
+    if(en1.alive):
+        
+        if(en1.x <= 0):
+            en1.dir = 'r'
+        elif(en1.x >= xPixels -1):
+            en1.dir = 'l'
+       
+        if(en1.dir == 'r'):
+            en1.x += 1
+        else:
+            en1.x -= 1
+            
+    
+        unicornhathd.set_pixel(en1.x, en1.y, 255, 0, 0)
+    
+    
+    return
+
 def DrawShip(): 
     unicornhathd.set_pixel(shipX, shipY, 255, 255, 0)
     
@@ -62,9 +92,12 @@ try:
         unicornhathd.clear()
         #print(shipY)
         DrawShip();
+        DrawEnemies()
         
         if(shotY < yPixels -1):
             shotY +=1
+            if(shotY == en1.y and shotX == en1.x):
+                en1.alive = False
         else:
             shotActive = False
                      
