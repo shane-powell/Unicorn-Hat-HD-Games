@@ -27,6 +27,14 @@ shotX = 0
 shotY = 0
 shotActive = False
 
+maxProjectiles = 3
+projs = []
+
+class Proj:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
 class Enemy:
     def __init__(self, x, y, dir):
         self.x = x
@@ -60,8 +68,8 @@ def DrawEnemies():
 def DrawShip(): 
     unicornhathd.set_pixel(shipX, shipY, 255, 255, 0)
     
-    if(shotActive == True):
-        unicornhathd.set_pixel(shotX, shotY, 0, 0, 255)
+    #if(shotActive == True):
+     #   unicornhathd.set_pixel(shotX, shotY, 0, 0, 255)
     
     return
 
@@ -75,31 +83,42 @@ try:
         for event in pygame.event.get():
             if (event.type == KEYDOWN):
                 if event.key == pygame.K_LEFT:
-                    shipX -= 1
+                    if(shipX > 0):
+                        shipX -= 1
                 elif event.key == pygame.K_RIGHT:
-                    shipX += 1
+                    if(shipX < yPixels - 1): 
+                        shipX += 1
 ##                elif event.key == pygame.K_UP:
 ##                    shipY += 1
 ##                elif event.key == pygame.K_DOWN:                        
 ##                    shipY -= 1
                 
                 if event.key == pygame.K_SPACE:
-                    shotX = shipX
-                    shotY = shipY + 1
-                    shotActive = True
-                
+                    print(len(projs))
+                    if(len(projs) < 3):
+                        p = Proj(shipX, shipY +1)
+                        projs.append(p)                                  
     
         unicornhathd.clear()
-        #print(shipY)
         DrawShip();
-        DrawEnemies()
+        DrawEnemies();
         
-        if(shotY < yPixels -1):
-            shotY +=1
-            if(shotY == en1.y and shotX == en1.x):
-                en1.alive = False
-        else:
-            shotActive = False
+        for p in projs:
+            if(p.y < yPixels -1):
+                p.y +=1
+                if(p.y == en1.y and p.x == en1.x):
+                    en1.alive = False
+                unicornhathd.set_pixel(p.x, p.y, 0, 0, 255)
+            else:
+                projs.remove(p)
+
+        
+        #if(shotY < yPixels -1):
+        #    shotY +=1
+        #    if(shotY == en1.y and shotX == en1.x):
+        #       en1.alive = False
+       # else:
+        #    shotActive = False
                      
         unicornhathd.show()
                 
