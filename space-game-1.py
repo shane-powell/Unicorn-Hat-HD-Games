@@ -1,6 +1,4 @@
 #! /usr/bin/python
-import mcpi.minecraft as minecraft
-import mcpi.block as block
 
 import unicornhathd
 import pygame, time
@@ -22,10 +20,6 @@ u_width,u_height = unicornhathd.get_shape()
 
 xPixels = 16
 yPixels = 16
-
-shotX = 0
-shotY = 0
-shotActive = False
 
 maxProjectiles = 3
 projs = []
@@ -66,11 +60,7 @@ def DrawEnemies():
     return
 
 def DrawShip(): 
-    unicornhathd.set_pixel(shipX, shipY, 255, 255, 0)
-    
-    #if(shotActive == True):
-     #   unicornhathd.set_pixel(shotX, shotY, 0, 0, 255)
-    
+    unicornhathd.set_pixel(shipX, shipY, 255, 255, 0)  
     return
 
 try:
