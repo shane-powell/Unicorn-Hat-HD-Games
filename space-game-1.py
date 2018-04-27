@@ -4,8 +4,6 @@ import unicornhathd
 import pygame, time
 from pygame.locals import *
 
-
-
 pygame.init()
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((300, 10))
@@ -37,8 +35,9 @@ class Enemy:
         self.dir = dir
         self.alive = True
         
-e = Enemy(1, 15, 'r')
-enemies.append(e);
+def CreateEnemy(x, y, d):
+    e = Enemy(x, y, d)
+    enemies.append(e);
 
 def DrawEnemies():
     
@@ -47,15 +46,16 @@ def DrawEnemies():
         
             if(e.x <= 0):
                 e.dir = 'r'
+                e.y -= 1
             elif(e.x >= xPixels -1):
                 e.dir = 'l'
+                e.y -= 1
        
             if(e.dir == 'r'):
                 e.x += 1
             else:
                 e.x -= 1
-            
-    
+                          
             unicornhathd.set_pixel(e.x, e.y, 255, 0, 0)
         else:
             enemies.remove(e)  
@@ -69,7 +69,12 @@ def DrawShip():
 try:
     shipX = 7
     shipY = 0
-    while True:
+    
+    CreateEnemy(1, 15, 'r')
+    CreateEnemy(5, 14, 'l')
+    CreateEnemy(10, 13, 'r')
+    gameRunning = True
+    while gameRunning == True:
         #http://qq.readthedocs.io/en/latest/main_loop.html
         #print("loop")
         clock.tick(15)
@@ -81,10 +86,6 @@ try:
                 elif event.key == pygame.K_RIGHT:
                     if(shipX < yPixels - 1): 
                         shipX += 1
-##                elif event.key == pygame.K_UP:
-##                    shipY += 1
-##                elif event.key == pygame.K_DOWN:                        
-##                    shipY -= 1
                 
                 if event.key == pygame.K_SPACE:
                     print(len(projs))
@@ -107,18 +108,21 @@ try:
                 unicornhathd.set_pixel(p.x, p.y, 0, 0, 255)
             else:
                 projs.remove(p)
-
         
-        #if(shotY < yPixels -1):
-        #    shotY +=1
-        #    if(shotY == en1.y and shotX == en1.x):
-        #       en1.alive = False
-       # else:
-        #    shotActive = False
-                     
+        for e in enemies:
+            if(e.x == shipX and e.y == shipY):
+                gameRunning = False
+                print("game over");             
         unicornhathd.show()
+        
+    unicornhathd.clear()
+    #Show game over
+    unicornhathd.show();
+    time.sleep(10);
+
                 
 except KeyboardInterrupt:
     unicornhathd.clear()
     unicornhathd.off()
+    pygame.quit()
             
