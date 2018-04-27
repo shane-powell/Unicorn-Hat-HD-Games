@@ -23,6 +23,7 @@ yPixels = 16
 
 maxProjectiles = 3
 projs = []
+enemies = []
 
 class Proj:
     def __init__(self, x, y):
@@ -36,26 +37,28 @@ class Enemy:
         self.dir = dir
         self.alive = True
         
-en1 = Enemy(1, 15, 'r')
+e = Enemy(1, 15, 'r')
+enemies.append(e);
 
 def DrawEnemies():
     
-    
-    if(en1.alive):
+    for e in enemies:
+        if(e.alive):
         
-        if(en1.x <= 0):
-            en1.dir = 'r'
-        elif(en1.x >= xPixels -1):
-            en1.dir = 'l'
+            if(e.x <= 0):
+                e.dir = 'r'
+            elif(e.x >= xPixels -1):
+                e.dir = 'l'
        
-        if(en1.dir == 'r'):
-            en1.x += 1
-        else:
-            en1.x -= 1
+            if(e.dir == 'r'):
+                e.x += 1
+            else:
+                e.x -= 1
             
     
-        unicornhathd.set_pixel(en1.x, en1.y, 255, 0, 0)
-    
+            unicornhathd.set_pixel(e.x, e.y, 255, 0, 0)
+        else:
+            enemies.remove(e)  
     
     return
 
@@ -96,8 +99,11 @@ try:
         for p in projs:
             if(p.y < yPixels -1):
                 p.y +=1
-                if(p.y == en1.y and p.x == en1.x):
-                    en1.alive = False
+                for e in enemies:
+                    if(e.alive):
+                        if(p.y == e.y and p.x == e.x):
+                            e.alive = False
+                        
                 unicornhathd.set_pixel(p.x, p.y, 0, 0, 255)
             else:
                 projs.remove(p)
