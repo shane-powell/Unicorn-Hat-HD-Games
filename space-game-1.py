@@ -1,7 +1,7 @@
 #! /usr/bin/python
 
 import unicornhathd
-import pygame, time
+import pygame, time, random
 from pygame.locals import *
 
 pygame.init()
@@ -22,6 +22,7 @@ yPixels = 16
 maxProjectiles = 3
 projs = []
 enemies = []
+enProjs = []
 
 class Proj:
     def __init__(self, x, y):
@@ -57,6 +58,10 @@ def DrawEnemies():
                 e.x -= 1
                           
             unicornhathd.set_pixel(e.x, e.y, 255, 0, 0)
+            if(random.randint(1, 20) == 1):
+                #Fire
+                eP = Proj(e.x, e.y -1)
+                enProjs.append(eP)
         else:
             enemies.remove(e)  
     
@@ -65,6 +70,9 @@ def DrawEnemies():
 def DrawShip(): 
     unicornhathd.set_pixel(shipX, shipY, 255, 255, 0)  
     return
+
+#def StartGame():
+
 
 try:
     shipX = 7
@@ -108,6 +116,19 @@ try:
                 unicornhathd.set_pixel(p.x, p.y, 0, 0, 255)
             else:
                 projs.remove(p)
+                
+        #Enemy projectile hit test       
+        for p in enProjs:
+            if(p.y > 0):
+                p.y -=1
+                
+                if(p.x == shipX and p.y == shipY):
+                    gameRunning = False
+                    print("game over");   
+                        
+                unicornhathd.set_pixel(p.x, p.y, 0, 255, 255)
+            else:
+                enProjs.remove(p)
         
         for e in enemies:
             if(e.x == shipX and e.y == shipY):
